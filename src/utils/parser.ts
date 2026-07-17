@@ -366,3 +366,146 @@ export const extractPageData = (): PageData | null => {
     messageId
   };
 };
+
+export const isReflowable = (line: string): boolean => {
+  const trimmed = line.trim();
+  if (trimmed === '') return false;
+  if (trimmed === '--') return false; // Signature separator
+  
+  if (line.includes('class="add"') || line.includes('class="del"')) return false;
+  
+  if (trimmed.startsWith('+') || 
+      trimmed.startsWith('-') || 
+      trimmed.startsWith('@@') || 
+      trimmed.startsWith('diff ') || 
+      trimmed.startsWith('Index:') ||
+      trimmed.startsWith('--- ') ||
+      trimmed.startsWith('+++ ')) {
+    return false;
+  }
+  
+  if (trimmed.startsWith('* ') || 
+      trimmed.startsWith('- ') || 
+      trimmed.startsWith('+ ') || 
+      /^\d+\.\s+/.test(trimmed)) {
+    return false;
+  }
+  
+  if (/^(\t|\s{3,})/.test(line)) {
+    return false;
+  }
+  
+  if (trimmed.endsWith(':')) return false;
+  
+  if (trimmed.startsWith('[') && trimmed.includes(']')) return false;
+  
+  return true;
+};
+
+const processQuoteBlock = (lines: string[]): string => {
+  const cleanedLines = lines.map(line => {
+    let cleaned = line.trim();
+    if (cleaned.startsWith('&gt;')) {
+      cleaned = cleaned.substring(4);
+    } else if (cleaned.startsWith('>')) {
+      cleaned = cleaned.substring(1);
+    }
+    if (cleaned.startsWith(' ')) {
+      cleaned = cleaned.substring(1);
+    }
+    return cleaned;
+  });
+  
+  const resultLines: string[] = [];
+  let currentParagraph: string[] = [];
+  
+  const flushQuoteParagraph = () => {
+    if (currentParagraph.length > 0) {
+      resultLines.push(currentParagraph.join(' '));
+      currentParagraph = [];
+    }
+  };
+  
+  for (const line of cleanedLines) {
+    const trimmed = line.trim();
+    if (trimmed === '') {
+      flushQuoteParagraph();
+      resultLines.push('');
+    } else if (isReflowable(line)) {
+      currentParagraph.push(trimmed);
+    } else {
+      flushQuoteParagraph();
+      resultLines.push(line);
+    }
+  }
+  flushQuoteParagraph();
+  
+  return resultLines.join('\n');
+};
+
+export const reflowBodyHtml = (bodyHtml: string): string => {
+  const lines = bodyHtml.split('\n');
+  const processedLines: string[] = [];
+  
+  let inQuote = false;
+  let quoteLines: string[] = [];
+  let currentParagraph: string[] = [];
+  
+  const flushParagraph = () => {
+    if (currentParagraph.length > 0) {
+      processedLines.push(currentParagraph.join(' '));
+      currentParagraph = [];
+    }
+  };
+  
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+    
+    if (line.includes('class="q"')) {
+      flushParagraph();
+      inQuote = true;
+      quoteLines = [];
+      const startIdx = line.indexOf('class="q">') + 10;
+      const remainder = line.substring(startIdx);
+      if (remainder) quoteLines.push(remainder);
+      continue;
+    }
+    
+    if (inQuote) {
+      if (line.includes('</span>')) {
+        const endIdx = line.indexOf('</span>');
+        const remainder = line.substring(0, endIdx);
+        if (remainder) quoteLines.push(remainder);
+        
+        processedLines.push('<span class="q">' + processQuoteBlock(quoteLines) + '</span>');
+        inQuote = false;
+        
+        const afterSpan = line.substring(endIdx + 7);
+        if (afterSpan.trim()) {
+          if (isReflowable(afterSpan)) {
+            currentParagraph.push(afterSpan.trim());
+          } else {
+            processedLines.push(afterSpan);
+          }
+        }
+      } else {
+        quoteLines.push(line);
+      }
+      continue;
+    }
+    
+    if (trimmed === '') {
+      flushParagraph();
+      processedLines.push('');
+    } else if (isReflowable(line)) {
+      currentParagraph.push(trimmed);
+    } else {
+      flushParagraph();
+      processedLines.push(line);
+    }
+  }
+  
+  flushParagraph();
+  return processedLines.join('\n');
+};

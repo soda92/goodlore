@@ -3,6 +3,7 @@ export interface Settings {
   bodyFont: string;
   bodySize: string;
   centerMessage: boolean;
+  reflowParagraphs: boolean;
 }
 
 export const loadSettings = (): Settings => {
@@ -10,8 +11,9 @@ export const loadSettings = (): Settings => {
   const bodyFont = localStorage.getItem('goodlore-body-font') || 'var(--font-jetbrains)';
   const bodySize = localStorage.getItem('goodlore-body-size') || '15';
   const centerMessage = localStorage.getItem('goodlore-center-message') !== 'false';
+  const reflowParagraphs = localStorage.getItem('goodlore-reflow-paragraphs') !== 'false';
 
-  return { uiFont, bodyFont, bodySize, centerMessage };
+  return { uiFont, bodyFont, bodySize, centerMessage, reflowParagraphs };
 };
 
 export const applySettings = (settings: Settings) => {
@@ -21,7 +23,13 @@ export const applySettings = (settings: Settings) => {
 };
 
 export const saveSetting = (key: keyof Settings, value: string | boolean) => {
-  const storageKey = `goodlore-${key === 'uiFont' ? 'ui-font' : key === 'bodyFont' ? 'body-font' : key === 'bodySize' ? 'body-size' : 'center-message'}`;
+  const storageKey = `goodlore-${
+    key === 'uiFont' ? 'ui-font' : 
+    key === 'bodyFont' ? 'body-font' : 
+    key === 'bodySize' ? 'body-size' : 
+    key === 'centerMessage' ? 'center-message' : 
+    'reflow-paragraphs'
+  }`;
   localStorage.setItem(storageKey, String(value));
 };
 

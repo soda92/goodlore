@@ -62,6 +62,13 @@ export const Header = ({
     saveSetting('centerMessage', val);
   };
 
+  const handleReflowParagraphsChange = (e: Event) => {
+    const val = (e.target as HTMLInputElement).checked;
+    const newSettings = { ...settings, reflowParagraphs: val };
+    onSettingsChange(newSettings);
+    saveSetting('reflowParagraphs', val);
+  };
+
   return (
     <header class="goodlore-header">
       <a href={formAction} class="goodlore-logo">
@@ -136,6 +143,17 @@ export const Header = ({
               id="settings-center-msg-check" 
               checked={settings.centerMessage} 
               onChange={handleCenterMessageChange}
+              style={{ accentColor: 'var(--accent-color)', cursor: 'pointer', width: '16px', height: '16px' }}
+            />
+          </div>
+
+          <div class="settings-control-group" style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: '4px' }}>
+            <label class="settings-label" htmlFor="settings-reflow-check" style={{ cursor: 'pointer' }}>Reflow Text Paragraphs</label>
+            <input 
+              type="checkbox" 
+              id="settings-reflow-check" 
+              checked={settings.reflowParagraphs} 
+              onChange={handleReflowParagraphsChange}
               style={{ accentColor: 'var(--accent-color)', cursor: 'pointer', width: '16px', height: '16px' }}
             />
           </div>

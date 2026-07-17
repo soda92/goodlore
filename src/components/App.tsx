@@ -1,6 +1,6 @@
 import { h } from 'preact';
 import { useState } from 'preact/hooks';
-import { PageData, formatRecipients } from '../utils/parser';
+import { PageData, formatRecipients, reflowBodyHtml } from '../utils/parser';
 import { Settings, toggleTheme, copyToClipboard } from '../utils/settings';
 import { Header } from './Header';
 import { MessageCard } from './MessageCard';
@@ -92,7 +92,7 @@ export const App = ({ pageData, initialSettings, initialIsLight }: AppProps) => 
             sender={pageData.sender}
             dateObj={pageData.dateObj}
             headers={pageData.headers}
-            bodyHtml={pageData.bodyHtml}
+            bodyHtml={settings.reflowParagraphs ? reflowBodyHtml(pageData.bodyHtml) : pageData.bodyHtml}
             messageId={pageData.messageId}
             toBadgesHtml={formatRecipients(pageData.headers.to)}
             ccBadgesHtml={formatRecipients(pageData.headers.cc)}
