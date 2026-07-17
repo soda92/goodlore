@@ -1,0 +1,22 @@
+{
+  "name": "goodlore",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "watch": "vite build --watch",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.10.5",
+    "@vitejs/plugin-basic-ssl": "^2.3.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.1.4",
+    "vite-plugin-monkey": "^8.0.6"
+  },
+  "dependencies": {
+    "preact": "^10.29.7"
+  }
+}
