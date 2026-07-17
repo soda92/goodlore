@@ -1,17 +1,14 @@
 import { defineConfig } from 'vite';
 import preact from '@preact/preset-vite';
 import monkey from 'vite-plugin-monkey';
-import basicSsl from '@vitejs/plugin-basic-ssl';
 
 export default defineConfig({
   server: {
-    port: 9280,
-    host: '127.0.0.1',
-    https: true
+    port: 9282,
+    host: '127.0.0.1'
   },
   plugins: [
     preact(),
-    basicSsl(),
     monkey({
       entry: 'src/main.tsx',
       userscript: {
@@ -20,7 +17,7 @@ export default defineConfig({
         version: '1.0.0',
         description: 'A premium, modern, and highly interactive user experience for lore.kernel.org threads. Includes light/dark mode, thread filtering, hierarchical indent guidelines, visual reply templates, and font/size controls.',
         match: ['https://lore.kernel.org/*'],
-        grant: 'none',
+        grant: ['GM_xmlhttpRequest'],
         'run-at': 'document-end'
       },
     }),
