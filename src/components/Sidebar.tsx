@@ -12,9 +12,13 @@ export const Sidebar = ({ treeNodes }: SidebarProps) => {
 
   useEffect(() => {
     if (containerRef.current) {
-      const activeItem = containerRef.current.querySelector('.thread-tree-item.active');
+      const activeItem = containerRef.current.querySelector('.thread-tree-item.active') as HTMLElement;
       if (activeItem) {
-        activeItem.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        const container = containerRef.current;
+        const containerRect = container.getBoundingClientRect();
+        const activeRect = activeItem.getBoundingClientRect();
+        const offset = activeRect.top - containerRect.top - (containerRect.height / 2) + (activeRect.height / 2);
+        container.scrollBy({ top: offset, behavior: 'smooth' });
       }
     }
   }, [treeNodes]);

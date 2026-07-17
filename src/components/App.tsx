@@ -53,7 +53,7 @@ export const App = ({ pageData, initialSettings, initialIsLight }: AppProps) => 
       />
       
       <div class="goodlore-layout">
-        <main class="goodlore-main">
+        <main class={`goodlore-main ${settings.centerMessage ? 'centered' : ''}`}>
           {/* Action Bar */}
           <div class="goodlore-card action-nav-bar">
             <div class="action-nav-group">

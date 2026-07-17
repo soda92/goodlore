@@ -179,10 +179,23 @@ export const parseTreeLine = (lineHtml: string): TreeNode | null => {
   if (!anchorMatch) return null;
   
   const href = anchorMatch[1];
-  const subject = anchorMatch[2];
   
   const linkEndIndex = cleanHtml.indexOf(anchorMatch[0]) + anchorMatch[0].length;
-  let author = cleanHtml.substring(linkEndIndex).trim();
+  const afterLink = cleanHtml.substring(linkEndIndex).trim();
+  
+  let author = '';
+  let subject = '';
+  
+  if (afterLink === '') {
+    // No text after <a> link means the text inside the link is the author name!
+    author = anchorMatch[2].trim();
+    subject = '';
+  } else {
+    // Text after <a> link means the text inside is the subject, and text after is the author name
+    author = afterLink;
+    subject = anchorMatch[2].trim();
+  }
+  
   if (author.endsWith('[this message]')) {
     author = author.replace('[this message]', '').trim();
     isCurrent = true;

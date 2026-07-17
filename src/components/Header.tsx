@@ -55,6 +55,13 @@ export const Header = ({
     saveSetting('bodySize', val);
   };
 
+  const handleCenterMessageChange = (e: Event) => {
+    const val = (e.target as HTMLInputElement).checked;
+    const newSettings = { ...settings, centerMessage: val };
+    onSettingsChange(newSettings);
+    saveSetting('centerMessage', val);
+  };
+
   return (
     <header class="goodlore-header">
       <a href={formAction} class="goodlore-logo">
@@ -97,11 +104,20 @@ export const Header = ({
           <div class="settings-control-group">
             <label class="settings-label" htmlFor="settings-body-font-select">Message Font Family</label>
             <select class="settings-select" id="settings-body-font-select" value={settings.bodyFont} onChange={handleBodyFontChange}>
-              <option value="var(--font-jetbrains)">JetBrains Mono (Default)</option>
-              <option value="var(--font-fira)">Fira Code</option>
-              <option value="var(--font-source)">Source Code Pro</option>
-              <option value="var(--font-roboto-mono)">Roboto Mono</option>
-              <option value="var(--font-system-mono)">System Monospace</option>
+              <optgroup label="Monospace Fonts (Best for patches)">
+                <option value="var(--font-jetbrains)">JetBrains Mono (Default)</option>
+                <option value="var(--font-fira)">Fira Code</option>
+                <option value="var(--font-source)">Source Code Pro</option>
+                <option value="var(--font-roboto-mono)">Roboto Mono</option>
+                <option value="var(--font-system-mono)">System Monospace</option>
+              </optgroup>
+              <optgroup label="Proportional Fonts (Discussions)">
+                <option value="var(--font-inter)">Inter (Sans)</option>
+                <option value="var(--font-plus-jakarta)">Plus Jakarta Sans</option>
+                <option value="var(--font-outfit)">Outfit</option>
+                <option value="var(--font-merriweather)">Merriweather (Serif)</option>
+                <option value="var(--font-georgia)">Georgia (Serif)</option>
+              </optgroup>
             </select>
           </div>
 
@@ -111,6 +127,17 @@ export const Header = ({
               <input type="range" min="12" max="22" value={settings.bodySize} class="settings-slider" id="settings-body-size-slider" onInput={handleBodySizeChange} />
               <span class="settings-slider-value">{settings.bodySize}px</span>
             </div>
+          </div>
+
+          <div class="settings-control-group" style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: '4px' }}>
+            <label class="settings-label" htmlFor="settings-center-msg-check" style={{ cursor: 'pointer' }}>Center Message Content</label>
+            <input 
+              type="checkbox" 
+              id="settings-center-msg-check" 
+              checked={settings.centerMessage} 
+              onChange={handleCenterMessageChange}
+              style={{ accentColor: 'var(--accent-color)', cursor: 'pointer', width: '16px', height: '16px' }}
+            />
           </div>
         </div>
       </div>

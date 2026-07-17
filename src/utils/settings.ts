@@ -2,14 +2,16 @@ export interface Settings {
   uiFont: string;
   bodyFont: string;
   bodySize: string;
+  centerMessage: boolean;
 }
 
 export const loadSettings = (): Settings => {
   const uiFont = localStorage.getItem('goodlore-ui-font') || 'var(--font-inter)';
   const bodyFont = localStorage.getItem('goodlore-body-font') || 'var(--font-jetbrains)';
   const bodySize = localStorage.getItem('goodlore-body-size') || '15';
+  const centerMessage = localStorage.getItem('goodlore-center-message') !== 'false';
 
-  return { uiFont, bodyFont, bodySize };
+  return { uiFont, bodyFont, bodySize, centerMessage };
 };
 
 export const applySettings = (settings: Settings) => {
@@ -18,9 +20,9 @@ export const applySettings = (settings: Settings) => {
   document.documentElement.style.setProperty('--body-font-size', `${settings.bodySize}px`);
 };
 
-export const saveSetting = (key: keyof Settings, value: string) => {
-  const storageKey = `goodlore-${key === 'uiFont' ? 'ui-font' : key === 'bodyFont' ? 'body-font' : 'body-size'}`;
-  localStorage.setItem(storageKey, value);
+export const saveSetting = (key: keyof Settings, value: string | boolean) => {
+  const storageKey = `goodlore-${key === 'uiFont' ? 'ui-font' : key === 'bodyFont' ? 'body-font' : key === 'bodySize' ? 'body-size' : 'center-message'}`;
+  localStorage.setItem(storageKey, String(value));
 };
 
 export const initTheme = (): boolean => {
