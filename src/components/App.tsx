@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import { useState } from 'preact/hooks';
+import { useState, useEffect } from 'preact/hooks';
 import { PageData, formatRecipients, reflowBodyHtml } from '../utils/parser';
 import { Settings, toggleTheme, copyToClipboard } from '../utils/settings';
 import { Header } from './Header';
@@ -16,6 +16,40 @@ interface AppProps {
 export const App = ({ pageData, initialSettings, initialIsLight }: AppProps) => {
   const [settings, setSettings] = useState<Settings>(initialSettings);
   const [isLight, setIsLight] = useState<boolean>(initialIsLight);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      if (
+        target.tagName === 'INPUT' || 
+        target.tagName === 'TEXTAREA' || 
+        target.tagName === 'SELECT' || 
+        target.isContentEditable
+      ) {
+        return;
+      }
+      
+      const header = document.querySelector('.goodlore-header');
+      const headerHeight = header ? header.clientHeight : 60;
+      const overlap = 30; // 30px overlap margin
+      const scrollStep = window.innerHeight - headerHeight - overlap;
+
+      if (e.key === ' ' || e.key === 'Spacebar') {
+        e.preventDefault();
+        const dir = e.shiftKey ? -1 : 1;
+        window.scrollBy({ top: scrollStep * dir, behavior: 'smooth' });
+      } else if (e.key === 'PageDown') {
+        e.preventDefault();
+        window.scrollBy({ top: scrollStep, behavior: 'smooth' });
+      } else if (e.key === 'PageUp') {
+        e.preventDefault();
+        window.scrollBy({ top: -scrollStep, behavior: 'smooth' });
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const handleThemeToggle = () => {
     const nextIsLight = toggleTheme();
