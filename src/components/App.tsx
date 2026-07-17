@@ -1,8 +1,7 @@
 import { h } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
 import { PageData, formatRecipients, reflowBodyHtml } from '../utils/parser';
-import { Settings, toggleTheme, copyToClipboard } from '../utils/settings';
-import { Header } from './Header';
+import { Settings, toggleTheme, copyToClipboard, saveSetting } from '../utils/settings';
 import { MessageCard } from './MessageCard';
 import { ReplyCard } from './ReplyCard';
 import { Sidebar } from './Sidebar';
@@ -29,10 +28,8 @@ export const App = ({ pageData, initialSettings, initialIsLight }: AppProps) => 
         return;
       }
       
-      const header = document.querySelector('.goodlore-header');
-      const headerHeight = header ? header.clientHeight : 60;
       const overlap = Number(settings.scrollOverlap) || 60;
-      const scrollStep = window.innerHeight - headerHeight - overlap;
+      const scrollStep = window.innerHeight - overlap;
 
       if (e.key === ' ' || e.key === 'Spacebar') {
         e.preventDefault();
@@ -60,6 +57,15 @@ export const App = ({ pageData, initialSettings, initialIsLight }: AppProps) => 
     setSettings(newSettings);
   };
 
+  const handleSidebarToggle = () => {
+    console.log("Toggle sidebar clicked. Current state:", settings.sidebarCollapsed);
+    const nextCollapsed = !settings.sidebarCollapsed;
+    const newSettings = { ...settings, sidebarCollapsed: nextCollapsed };
+    console.log("Setting next sidebar state:", nextCollapsed);
+    setSettings(newSettings);
+    saveSetting('sidebarCollapsed', nextCollapsed);
+  };
+
   const handleCopyEmailText = (e: MouseEvent) => {
     const rawPre = document.getElementById('b');
     const text = rawPre ? rawPre.innerText : '';
@@ -77,16 +83,31 @@ export const App = ({ pageData, initialSettings, initialIsLight }: AppProps) => 
 
   return (
     <div id="goodlore-app">
-      <Header 
-        formAction={pageData.searchAction}
-        searchQuery={pageData.searchQuery}
-        isLight={isLight}
-        onThemeToggle={handleThemeToggle}
-        settings={settings}
-        onSettingsChange={handleSettingsChange}
-      />
+      <button 
+        class={`goodlore-floating-menu-btn ${settings.sidebarCollapsed ? 'collapsed' : ''}`}
+        onClick={handleSidebarToggle}
+        title="Toggle Sidebar"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          {settings.sidebarCollapsed ? (
+            <path d="M3 12h18M3 6h18M3 18h18" stroke-linecap="round" />
+          ) : (
+            <path d="M18 6L6 18M6 6l12 12" stroke-linecap="round" />
+          )}
+        </svg>
+      </button>
       
-      <div class="goodlore-layout">
+      <div class={`goodlore-layout ${settings.sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
+        <Sidebar 
+          treeNodes={pageData.treeNodes}
+          formAction={pageData.searchAction}
+          searchQuery={pageData.searchQuery}
+          isLight={isLight}
+          onThemeToggle={handleThemeToggle}
+          settings={settings}
+          onSettingsChange={handleSettingsChange}
+        />
+        
         <main class={`goodlore-main ${settings.centerMessage ? 'centered' : ''}`}>
           {/* Action Bar */}
           <div class="goodlore-card action-nav-bar">
@@ -140,8 +161,6 @@ export const App = ({ pageData, initialSettings, initialIsLight }: AppProps) => 
             mboxGzUrl={pageData.mboxGzUrl}
           />
         </main>
-        
-        <Sidebar treeNodes={pageData.treeNodes} />
       </div>
     </div>
   );
