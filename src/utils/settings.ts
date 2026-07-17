@@ -5,7 +5,6 @@ export interface Settings {
   centerMessage: boolean;
   reflowParagraphs: boolean;
   scrollOverlap: string;
-  sidebarCollapsed: boolean;
 }
 
 export const loadSettings = (): Settings => {
@@ -15,9 +14,8 @@ export const loadSettings = (): Settings => {
   const centerMessage = localStorage.getItem('goodlore-center-message') !== 'false';
   const reflowParagraphs = localStorage.getItem('goodlore-reflow-paragraphs') !== 'false';
   const scrollOverlap = localStorage.getItem('goodlore-scroll-overlap') || '60';
-  const sidebarCollapsed = localStorage.getItem('goodlore-sidebar-collapsed') === 'true';
 
-  return { uiFont, bodyFont, bodySize, centerMessage, reflowParagraphs, scrollOverlap, sidebarCollapsed };
+  return { uiFont, bodyFont, bodySize, centerMessage, reflowParagraphs, scrollOverlap };
 };
 
 export const applySettings = (settings: Settings) => {
@@ -33,8 +31,7 @@ export const saveSetting = (key: keyof Settings, value: string | boolean) => {
     key === 'bodySize' ? 'body-size' : 
     key === 'centerMessage' ? 'center-message' : 
     key === 'reflowParagraphs' ? 'reflow-paragraphs' :
-    key === 'scrollOverlap' ? 'scroll-overlap' :
-    'sidebar-collapsed'
+    'scroll-overlap'
   }`;
   localStorage.setItem(storageKey, String(value));
 };

@@ -188,7 +188,9 @@ body:not(.goodlore-transformed-page) input[type="submit"]:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: relative;
+    position: sticky;
+    top: 0;
+    z-index: 100;
     box-shadow: var(--shadow-sm);
 }
 
@@ -387,7 +389,7 @@ body:not(.goodlore-transformed-page) input[type="submit"]:hover {
 
 @media (max-width: 1100px) {
     .goodlore-layout {
-        flex-direction: column-reverse;
+        flex-direction: column;
     }
     .goodlore-sidebar {
         width: 100% !important;
@@ -418,24 +420,8 @@ body:not(.goodlore-transformed-page) input[type="submit"]:hover {
     flex-direction: column;
     gap: 16px;
     position: sticky;
-    top: 24px;
-    height: calc(100vh - 48px);
-    transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
-                transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
-                opacity 0.2s ease,
-                margin-right 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    transform-origin: left;
-}
-
-/* Collapsed state */
-.sidebar-collapsed .goodlore-sidebar {
-    width: 0 !important;
-    padding: 0 !important;
-    margin-right: -24px;
-    overflow: hidden;
-    opacity: 0;
-    transform: scaleX(0);
-    pointer-events: none;
+    top: 86px;
+    height: calc(100vh - 120px);
 }
 
 /* Card Component Styles */
@@ -906,87 +892,4 @@ body:not(.goodlore-transformed-page) input[type="submit"]:hover {
 .goodlore-toast.show {
     transform: translateY(0);
     opacity: 1;
-}
-
-/* Floating Toggle Button */
-.goodlore-floating-menu-btn {
-    position: fixed;
-    top: 24px;
-    left: 24px;
-    z-index: 1000;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-color);
-    color: var(--text-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: var(--shadow-md);
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    outline: none;
-}
-
-.goodlore-floating-menu-btn:hover {
-    background-color: var(--bg-card-hover);
-    border-color: var(--accent-color);
-    transform: scale(1.05);
-}
-
-.goodlore-floating-menu-btn:active {
-    transform: scale(0.95);
-}
-
-/* Sidebar Brand & Actions */
-.sidebar-brand-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    min-height: 40px;
-    padding-left: 56px; /* Leave space for the floating menu button */
-    position: relative;
-}
-
-.sidebar-brand-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.sidebar-global-search {
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box;
-}
-
-.sidebar-divider {
-    border: none;
-    border-top: 1px solid var(--border-color);
-    margin: 8px 0;
-}
-
-/* Adjust Settings Popover to fit inside the sidebar */
-.goodlore-sidebar .settings-popover {
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 0;
-    right: 0;
-    width: auto;
-    box-shadow: var(--shadow-lg);
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 16px;
-    z-index: 200;
-}
-
-/* Collapsed Spacing Offset for Main Content */
-.sidebar-collapsed .goodlore-main {
-    padding-left: 64px;
-    transition: padding-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.goodlore-main {
-    transition: padding-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
