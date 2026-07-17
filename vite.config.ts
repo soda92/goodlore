@@ -18,7 +18,9 @@ export default defineConfig({
         description: 'A premium, modern, and highly interactive user experience for lore.kernel.org threads. Includes light/dark mode, thread filtering, hierarchical indent guidelines, visual reply templates, and font/size controls.',
         match: ['https://lore.kernel.org/*'],
         grant: ['GM_xmlhttpRequest'],
-        'run-at': 'document-end'
+        'run-at': 'document-end',
+        license: 'AGPL-3.0',
+        homepage: 'https://github.com/soda92/goodlore',
       },
     }),
   ],
