@@ -69,6 +69,13 @@ export const Header = ({
     saveSetting('reflowParagraphs', val);
   };
 
+  const handleScrollOverlapChange = (e: Event) => {
+    const val = (e.target as HTMLInputElement).value;
+    const newSettings = { ...settings, scrollOverlap: val };
+    onSettingsChange(newSettings);
+    saveSetting('scrollOverlap', val);
+  };
+
   return (
     <header class="goodlore-header">
       <a href={formAction} class="goodlore-logo">
@@ -133,6 +140,14 @@ export const Header = ({
             <div class="settings-slider-row">
               <input type="range" min="12" max="22" value={settings.bodySize} class="settings-slider" id="settings-body-size-slider" onInput={handleBodySizeChange} />
               <span class="settings-slider-value">{settings.bodySize}px</span>
+            </div>
+          </div>
+
+          <div class="settings-control-group">
+            <label class="settings-label">Keyboard Scroll Overlap</label>
+            <div class="settings-slider-row">
+              <input type="range" min="10" max="150" step="5" value={settings.scrollOverlap} class="settings-slider" id="settings-scroll-overlap-slider" onInput={handleScrollOverlapChange} />
+              <span class="settings-slider-value">{settings.scrollOverlap}px</span>
             </div>
           </div>
 

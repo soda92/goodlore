@@ -31,7 +31,7 @@ export const App = ({ pageData, initialSettings, initialIsLight }: AppProps) => 
       
       const header = document.querySelector('.goodlore-header');
       const headerHeight = header ? header.clientHeight : 60;
-      const overlap = 30; // 30px overlap margin
+      const overlap = Number(settings.scrollOverlap) || 60;
       const scrollStep = window.innerHeight - headerHeight - overlap;
 
       if (e.key === ' ' || e.key === 'Spacebar') {
@@ -49,7 +49,7 @@ export const App = ({ pageData, initialSettings, initialIsLight }: AppProps) => 
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [settings]);
 
   const handleThemeToggle = () => {
     const nextIsLight = toggleTheme();
