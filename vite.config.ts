@@ -1,10 +1,12 @@
 import { defineConfig } from 'vite';
+import preact from '@preact/preset-vite';
 import monkey from 'vite-plugin-monkey';
 
 export default defineConfig({
   plugins: [
+    preact(),
     monkey({
-      entry: 'src/main.js',
+      entry: 'src/main.tsx',
       userscript: {
         name: 'GoodLore',
         namespace: 'https://github.com/soda92/goodlore',
