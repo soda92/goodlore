@@ -3,6 +3,10 @@ import preact from '@preact/preset-vite';
 import monkey from 'vite-plugin-monkey';
 
 export default defineConfig({
+  server: {
+    port: 9280,
+    host: '127.0.0.1'
+  },
   plugins: [
     preact(),
     monkey({
