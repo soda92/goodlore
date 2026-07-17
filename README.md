@@ -41,8 +41,8 @@ This project is configured with Vite and `vite-plugin-monkey` to enable modern d
 
 ### Available Scripts:
 - `pnpm install`: Installs the required packages.
-- `pnpm run dev`: Starts the local development server at `http://localhost:5173/`. 
-  - Install the served dynamic loader script in your userscript manager *once*. Any changes you make to `src/main.js` will instantly reload in the browser!
+- `pnpm run dev`: Starts the local development server at `http://127.0.0.1:9282/`. 
+  - Install the served dynamic loader script in your userscript manager *once*. Any changes you make to `src/main.tsx` will instantly reload in the browser!
 - `pnpm run build`: Bundles, optimizes, and compiles the production script to `dist/goodlore.user.js`.
 
 ---
@@ -63,4 +63,4 @@ graph TD
 ```
 
 ## 📄 License
-This project is open-source and available under the MIT License.
+This project is open-source and available under the GNU Affero General Public License v3.0 (AGPL-3.0).
