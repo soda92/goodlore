@@ -28,10 +28,22 @@
 1. Install a userscript manager extension in your browser:
    - **Tampermonkey**: [Chrome/Edge/Opera](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) / [Firefox](https://addons.mozilla.org/firefox/addon/tampermonkey/)
    - **Violentmonkey**: [Chrome/Firefox](https://violentmonkey.github.io/)
-2. Open the userscript file: [goodlore.user.js](file:///home/soda/src/goodlore/goodlore.user.js).
+2. Open the compiled userscript file: [dist/goodlore.user.js](file:///home/soda/src/goodlore/dist/goodlore.user.js).
 3. Copy the entire contents of the script.
 4. Open your userscript manager, click **Create a new script**, paste the code, and save (`Ctrl+S`).
 5. Visit any [lore.kernel.org](https://lore.kernel.org/) page (e.g. [this thread](https://lore.kernel.org/all/3a5d891b536588e8e4fc84d60a5c8af72091d852.camel@redhat.com/)) to see the magic happen!
+
+---
+
+## 💻 Vite Development Workflow
+
+This project is configured with Vite and `vite-plugin-monkey` to enable modern development practices (like compilation, code splitting, and hot module reloading):
+
+### Available Scripts:
+- `pnpm install`: Installs the required packages.
+- `pnpm run dev`: Starts the local development server at `http://localhost:5173/`. 
+  - Install the served dynamic loader script in your userscript manager *once*. Any changes you make to `src/main.js` will instantly reload in the browser!
+- `pnpm run build`: Bundles, optimizes, and compiles the production script to `dist/goodlore.user.js`.
 
 ---
 
